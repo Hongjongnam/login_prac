@@ -7,31 +7,29 @@ const alertmove = require('../../utils/alertmove.js');
 require('dotenv').config();
 
 exports.login = async (req, res) => {
-  const { email, account } = req.body;
-  const sql = `SELECT * FROM user WHERE email = "${email}" AND account = "${account}"`;
-
-  let [result] = await pool.query(sql);
-  if (result.length !== 0) {
-    console.log('Cookie 생성해서 쿠키 넘겨줘야해');
-    const [{ email, account }] = result;
-    const payload = {
-      email,
-      account,
-    };
-    // console.log('payload', payload);
-    const jwt_token = createToken(payload);
-    console.log('여기까지맞나', jwt_token);
-    res.cookie('Access_token', token, { maxAge: 1000 * 60 * 60 });
-    // res.send(alertmove('http://localhost:3000', '로그인에 성공하였습니다.'));
-    // res.cookie('AccessToken', jwt_token, {
-    //   path: '/user/login',
-    //   httpOnly: true,
-    //   secure: true,
-    //   domain: 'localhost',
-    //   maxAge: 60 * 60 * 1000,
-    // });
-  } else {
-    res.send(alertmove('http://localhost:3000', 'Email을 확인하세요.'));
+  const account = req.body;
+  try {
+    const sql = `SELECT * FROM user WHERE account = "${account[0]}"`;
+    let [result] = await pool.query(sql);
+    if (result.length == 0) {
+      console.log('1. 계정없는곳');
+      res.json({ error: true });
+    } else {
+      console.log('2. 계정있는곳');
+      const [{ email, nickname, account }] = result;
+      const payload = {
+        email,
+        nickname,
+        account,
+      };
+      // console.log('payload', payload);
+      const jwt_token = createToken(payload);
+      // console.log('여기까지맞나', jwt_token);
+      res.json({ error: false, jwt_token });
+    }
+  } catch (e) {
+    console.error(e);
+    res.json({ error: true });
   }
 };
 
@@ -39,7 +37,6 @@ exports.regist = async (req, res) => {
   const { email, nickname, account } = req.body;
   const sql = `SELECT * FROM user WHERE email = "${email}" AND nickname = "${nickname}"`;
   let [result] = await pool.query(sql);
-  console.log('asdasdasdasd', result);
 
   if (result.length == 0) {
     // const { email, nickname, account } = req.body;
@@ -47,7 +44,7 @@ exports.regist = async (req, res) => {
     const sql = `INSERT INTO user(email, nickname, account) VALUES(?,?,?)`;
     const params = [email, nickname, account];
     const [result] = await pool.execute(sql, params);
-    res.json({ a: 1 });
+    res.json({ error: false });
   } else {
     console.log('여기는 중복됐다고 알려줘야함');
     res.json('중복');

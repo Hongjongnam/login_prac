@@ -3,9 +3,9 @@ import React from 'react';
 import useAccount from '../hooks/useAccount';
 
 const index = () => {
-  const { account } = useAccount();
+  // const { account } = useAccount();
 
-  if (!account == null) return '123';
+  // if (!account == null) return '123';
 
   return <></>;
 };

@@ -1,30 +1,6 @@
-// import Head from 'next/head';
-// import Image from 'next/image';
-// import styles from '../styles/Home.module.css';
-// import register from '../hooks/register';
-
-// export default function Home() {
-//   return (
-//     <form
-//     // onSubmit={handleSubmit(onSubmit)}
-//     >
-//       {/* register your input into the hook by invoking the "register" function */}
-//       <input defaultValue="test" {...register('example')} />
-
-//       {/* include validation with required or other standard HTML validation rules */}
-//       <input {...register('exampleRequired', { required: true })} />
-//       {/* errors will return when field validation fails  */}
-//       {/* {errors.exampleRequired && <p>This field is required</p>} */}
-
-//       <input type="submit" />
-//     </form>
-//   );
-// }
-
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import { Input } from '@chakra-ui/react';
 import useAccount from '../../hooks/useAccount';
 
 function Regist() {
@@ -47,7 +23,11 @@ function Regist() {
       account,
     };
     const result = await axios.post('http://localhost:4000/user/regist', valid);
-    console.log(result.data);
+    console.log(result.data.error);
+    if (result.data.error == false) {
+      alert('가입완료');
+      window.location.href = 'http://localhost:3000';
+    }
   };
 
   // const onChange = async (e) => {
