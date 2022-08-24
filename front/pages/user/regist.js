@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import useAccount from '../../hooks/useAccount';
 
+
+
 function Regist() {
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
@@ -32,14 +34,14 @@ function Regist() {
     }
   };
 
-  const validation = async (e) => {
-    const valid = e.target.value;
-    w
-    console.log(e.target.value);
-    const result = await axios.post("http://localhost:4000/user/regist", valid )
+  // const validation = async (e) => {
+  //   const valid = e.target.value;
+    
+  //   console.log(e.target.value);
+  //   const result = await axios.post("http://localhost:4000/user/regist", valid )
 
-    console.log(result.data);
-  };
+  //   console.log(result.data);
+  // };
 
   return (
     <div className="regist">
@@ -57,7 +59,9 @@ function Regist() {
           // onChange={(e) => {
           //   setEmail(e.target.value);
           // }}
-          onChange = {(e) => (validation())}
+          onChange = {(e)=>{
+            setEmail(e.target.value)
+          }}
           value={email}
         />
         {errors.email && <p className="valid">Email 형식에 맞게 써줘</p>}
