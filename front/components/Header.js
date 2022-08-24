@@ -3,6 +3,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { FaUserAlt, FaDownload } from 'react-icons/fa';
 import ConnectModal from './ConnectModal';
+import axios from "axios"
 
 const Header = () => {
   // const connect = async (e) => {
@@ -12,6 +13,13 @@ const Header = () => {
   //   });
   //   window.location.reload();
   // };
+  const Logout = () =>{
+    // const result = await axios.post('http://localhost:4000/user/logout', null);
+  //   window.localStorage.setItem('AccessToken',undefined)
+  //  window.localStorage.removeItem('Team3_Cookie')
+  //  alert("Logout")
+  //  window.location.href = "http://localhost:3000"
+  }
 
   return (
     <Flex position="fixed" w="full" bg="#0e101c" justifyContent="space-between" px="12" py="2" board-bottom="1px solid">
@@ -51,15 +59,28 @@ const Header = () => {
         </Link>
       </Box>
       <Box>
-        <>
+       {/* { window.localStorage.Team3_Cookie ? (
+              <Button size="sm" variant="ghost" color="white" onClick={Logout}>
+                log out
+              </Button>
+        ) : (
+          <>
           <ConnectModal />
-
           <Link href="https://metamask.io/download/">
             <Button size="sm" variant="ghost" color="white">
               <FaDownload />
             </Button>
           </Link>
-        </>
+          </>
+        )} */}
+         <>
+          <ConnectModal />
+          <Link href="https://metamask.io/download/">
+            <Button size="sm" variant="ghost" color="white">
+              <FaDownload />
+            </Button>
+          </Link>
+          </>
       </Box>
 
       {/* <Box>

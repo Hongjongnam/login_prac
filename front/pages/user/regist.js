@@ -6,37 +6,41 @@ import useAccount from '../../hooks/useAccount';
 function Regist() {
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
+  const [valid, setValid] = useState("")
   const { account } = useAccount();
 
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
 
   const onSubmit = async (data) => {
     // console.log('data', data);
-    const valid = {
+    const regist = {
       email,
       nickname,
       account,
     };
-    const result = await axios.post('http://localhost:4000/user/regist', valid);
+    const result = await axios.post('http://localhost:4000/user/regist', regist);
     console.log(result.data.error);
     if (result.data.error == false) {
       alert('가입완료');
       window.location.href = 'http://localhost:3000';
+    } else {
+      alert("존재하는 Email or Nickname 입니다.")
     }
   };
 
-  // const onChange = async (e) => {
-  //   const valid = e.target.value;
-  //   console.log(e.target.value);
+  const validation = async (e) => {
+    const valid = e.target.value;
+    w
+    console.log(e.target.value);
+    const result = await axios.post("http://localhost:4000/user/regist", valid )
 
-  //   console.log(result.data);
-  // };
-  console.log(watch());
+    console.log(result.data);
+  };
+
   return (
     <div className="regist">
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
@@ -50,9 +54,10 @@ function Regist() {
             required: true,
             pattern: /[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$/i,
           })}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
+          // onChange={(e) => {
+          //   setEmail(e.target.value);
+          // }}
+          onChange = {(e) => (validation())}
           value={email}
         />
         {errors.email && <p className="valid">Email 형식에 맞게 써줘</p>}
@@ -84,7 +89,8 @@ function Regist() {
         <br />
         <br />
         <br />
-        <input className="submit_input" type="submit" />
+        <input 
+        className="submit_input" type="submit" />
       </form>
     </div>
   );

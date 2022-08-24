@@ -34,20 +34,24 @@ exports.login = async (req, res) => {
 };
 
 exports.regist = async (req, res) => {
-  const { email, nickname, account } = req.body;
-  const sql = `SELECT * FROM user WHERE email = "${email}" AND nickname = "${nickname}"`;
-  let [result] = await pool.query(sql);
+  const { email, nickname, account, valid } = req.body;
+  try {
+    const sql = `SELECT * FROM user WHERE email = "${email}" AND nickname = "${nickname}"`;
+    let [result] = await pool.query(sql);
+    if (result.length == 0) {
+      // const { email, nickname, account } = req.body;
+      const sql = `INSERT INTO user(email, nickname, account) VALUES(?,?,?)`;
+      const params = [email, nickname, account];
+      const [result] = await pool.execute(sql, params);
+      console.log('회원가입 완료');
 
-  if (result.length == 0) {
-    // const { email, nickname, account } = req.body;
-    console.log('회원가입 완료 / 데이터베이스에 넣자 / 쿼리문 작성 / res.json 으로 회원가입 성공 메세지 넘겨줘');
-    const sql = `INSERT INTO user(email, nickname, account) VALUES(?,?,?)`;
-    const params = [email, nickname, account];
-    const [result] = await pool.execute(sql, params);
-    res.json({ error: false });
-  } else {
-    console.log('여기는 중복됐다고 알려줘야함');
-    res.json('중복');
+      res.json({ error: false });
+    } else {
+      console.log('여기는 중복됐다고 알려줘야함');
+    }
+  } catch (e) {
+    res.json({ error: true });
   }
+
   // onChange 로 온 email값을 디비와 연결해서 값이 있으면 중복이라고 보내주기 없으면 없다고 알려주기
 };
